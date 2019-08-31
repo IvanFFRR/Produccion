@@ -28,6 +28,7 @@ public class Gestor {
             
             con = DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
+            System.out.print("Error:" + e.getMessage());
         }
         
     }
@@ -39,7 +40,7 @@ public class Gestor {
            }
        } 
        catch (SQLException e) {
-
+           System.out.print("Error:" + e.getMessage());
        }
     }
     
@@ -63,7 +64,7 @@ public class Gestor {
             }
             
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -91,7 +92,7 @@ public class Gestor {
             }
         }
         catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         }
         finally {
             Desconectar();
@@ -111,7 +112,7 @@ public class Gestor {
             while(rs.next()) {
                 int codigo = rs.getInt("codigoProduccion");
                 String fecha = rs.getString("fecha");
-                int cantidad = rs.getInt("cantidad");
+                int cantidad = rs.getInt("cantidadProduccion");
                 int codigoResponsable = rs.getInt("codigoResponsable");
                 int codigoComponente = rs.getInt("codigoComponente");
                 
@@ -127,7 +128,7 @@ public class Gestor {
                 lista.add(p);                
             }
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         }
         finally {
             Desconectar();
@@ -140,7 +141,7 @@ public class Gestor {
         
         try {
             Conectar();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Produccion (fecha, cantidad, codigoResponsable, codigoComponente) VALUES (?,?,?,?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Produccion (fecha, cantidadProduccion, codigoResponsable, codigoComponente) VALUES (?,?,?,?)");
             ps.setString(1, p.getFecha());
             ps.setInt(2, p.getCantidad());
             ps.setInt(3, p.getResponsable().getId());
@@ -150,7 +151,7 @@ public class Gestor {
             inserto = true;
         }
         catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -173,7 +174,7 @@ public class Gestor {
             ps.execute();
             actualizado = true;
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -192,7 +193,7 @@ public class Gestor {
            borrado = true;
            
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -240,7 +241,7 @@ public class Gestor {
                 
             }
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -269,7 +270,7 @@ public class Gestor {
             }
             
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -296,7 +297,7 @@ public class Gestor {
                 lista.add(po);
             }
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -329,7 +330,7 @@ public class Gestor {
             }
             
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -347,7 +348,7 @@ public class Gestor {
             promedio = rs.getFloat(1);
             
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
@@ -366,7 +367,7 @@ public class Gestor {
             ResultSet rs = st.executeQuery(sql);
             porcentaje = rs.getFloat(1);
         } catch (SQLException e) {
-            
+            System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
