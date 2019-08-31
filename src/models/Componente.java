@@ -39,7 +39,7 @@ public class Componente {
 
     @Override
     public String toString() {
-        return "Componente{" + "descripcion: " + descripcion + '}';
+        return String.format("%d - %s", id, descripcion);
     }
        
 }

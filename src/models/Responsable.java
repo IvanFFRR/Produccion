@@ -39,7 +39,7 @@ public class Responsable {
 
     @Override
     public String toString() {
-        return "Responsable{" + "nombre= " + nombre + '}';
+        return String.format("%d - %s", id, nombre);
     }
       
 }
