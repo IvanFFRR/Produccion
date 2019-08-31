@@ -65,18 +65,27 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaActionPerformed
+        this.setVisible(false);
+        this.setEnabled(false);
         Alta alta = new Alta();
         alta.setVisible(true);
+        
     }//GEN-LAST:event_btnAltaActionPerformed
 
     private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultasActionPerformed
+        this.setVisible(false);
+        this.setEnabled(false);
         Consultas consulta = new Consultas();
         consulta.setVisible(true);
+        
     }//GEN-LAST:event_btnConsultasActionPerformed
 
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        this.setVisible(false);
+        this.setEnabled(false);
         Reportes reportes = new Reportes();
         reportes.setVisible(true);
+       
     }//GEN-LAST:event_btnReportesActionPerformed
 
     /**

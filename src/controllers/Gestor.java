@@ -201,9 +201,9 @@ public class Gestor {
         return borrado;
     }
     
-    public ArrayList<ProduccionOperario> obtenerProduccionPorOperario(int codigo) {
+    public ArrayList<ProduccionOperario> obtenerProduccionOperario(int codigo) {
         ArrayList<ProduccionOperario> lista = new ArrayList<>();
-        String sql = "SELECT p.fecha, r.codigo AS CodigoOperario, r.nombre AS Operario, p.codigoProduccion, p.cantidadProduccion AS Cantidad, c.codigo AS CodigoOperario, c.descripcion AS Componentes FROM Responsables r, Produccion p, Componentes c WHERE p.codigoResponsable = r.codigo AND p.codigoComponente = c.codigo AND r.codigo = ?";
+        String sql = "SELECT p.fecha, r.codigo AS CodigoOperario, r.nombre AS Operario, p.codigoProduccion, p.cantidadProduccion AS Cantidad, c.codigo AS CodigoComponente, c.descripcion AS Componente FROM Responsables r, Produccion p, Componentes c WHERE p.codigoResponsable = r.codigo AND p.codigoComponente = c.codigo AND r.codigo = ?";
                 
         try {
             Conectar();

@@ -5,6 +5,13 @@
  */
 package views;
 
+import controllers.Gestor;
+import dto.ProduccionOperario;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import models.Responsable;
+
 /**
  *
  * @author IVAN
@@ -16,7 +23,39 @@ public class Consultas extends javax.swing.JFrame {
      */
     public Consultas() {
         initComponents();
+        cargarCombo();
+        llenarTabla();
     }
+    
+    public void cargarCombo() {
+        Gestor gestor = new Gestor();
+        ArrayList<Responsable> responsables = gestor.obtenerResponsables();
+        DefaultComboBoxModel modelR = new DefaultComboBoxModel();
+        for (Responsable responsable : responsables) {
+            modelR.addElement(responsable);
+        }
+        cmbResponsables.setModel(modelR);
+    }
+    
+    public void llenarTabla() {
+        Gestor gestor = new Gestor();
+        Responsable r = (Responsable)this.cmbResponsables.getSelectedItem();
+        ArrayList<ProduccionOperario> lista = gestor.obtenerProduccionOperario(r.getId());
+        
+        String titulos[] = {"Fecha", "Componentes", "Cantidad"};
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(titulos);
+        
+        for (ProduccionOperario po : lista) {
+            model.addRow(new Object[] { po.getFecha(), po.getDescComponente(), po.getCantidadProduccion() });
+        }
+        
+        tabla.setModel(model);
+    }
+            
+        
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,21 +66,59 @@ public class Consultas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        cmbResponsables = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabla);
+
+        cmbResponsables.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbResponsables.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbResponsablesItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addComponent(cmbResponsables, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cmbResponsables, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbResponsablesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbResponsablesItemStateChanged
+        llenarTabla();
+    }//GEN-LAST:event_cmbResponsablesItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -79,5 +156,8 @@ public class Consultas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cmbResponsables;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }
