@@ -5,6 +5,11 @@
  */
 package views;
 
+import controllers.Gestor;
+import dto.ProduccionOperario;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author IVAN
@@ -15,11 +20,82 @@ public class Reportes extends javax.swing.JFrame {
      * Creates new form Reportes
      */
     public Reportes() {
-        initComponents();
+        initComponents();                                 
+        cargarConsultas(combo.getSelectedIndex());
+        otrasConsultas();
+    }
+
+    
+    
+    Gestor gestor;
+    DefaultTableModel model;
+    
+    public void cargarConsultas(int i) {
+        gestor = new Gestor();
+        
+        switch(i) {
+            case 0: totalOperario();
+            break;
+            case 1: totalComponente();
+            break;
+            case 2: masDe100();
+            break;
+            
+        }
+              
+    }
+    
+    public void otrasConsultas() {
+        gestor = new Gestor(); 
+        lblPromedio.setText(String.format("El promedio general de cantidad producida es igual a %.2f", gestor.obtenerPromedio()));
+        lblPorcentaje.setText(String.format("El porcentaje de producción menor a 10 es del %.2f%%", gestor.obtenerPorcentaje()));
+    }
+    
+    public void totalOperario() {
+        gestor = new Gestor(); 
+        ArrayList<ProduccionOperario> lista = gestor.totalOperario();
+        
+        String titulos[] = { "Nombre", "Cantidad"};
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(titulos);
+        
+        for(ProduccionOperario po : lista) {
+            model.addRow(new Object[] { po.getNombreResponsable(), po.getCantidadProduccion() });
+        }
+        tabla.setModel(model);
     }
     
     
-
+    public void totalComponente() {
+        gestor = new Gestor();
+        ArrayList<ProduccionOperario> lista = gestor.totalComponente();
+        
+        String titulos[] = { "Descripción", "Cantidad"};
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(titulos);
+        
+        for(ProduccionOperario po : lista) {
+            model.addRow(new Object[] { po.getDescComponente(), po.getCantidadProduccion() });
+        }
+        tabla.setModel(model);
+    }
+    
+    public void masDe100() {
+        gestor = new Gestor();
+        ArrayList<ProduccionOperario> lista = gestor.masDe100Unidades();
+        
+        String titulos[] = { "Nombre", "Descripción", "Fecha", "Cantidad" };
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(titulos);
+        
+        for(ProduccionOperario po : lista) {
+            model.addRow(new Object[] { po.getNombreResponsable(), po.getDescComponente(), po.getFecha(), po.getCantidadProduccion() });
+        }
+        tabla.setModel(model);
+                
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,21 +105,74 @@ public class Reportes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        combo = new javax.swing.JComboBox<>();
+        lblPromedio = new javax.swing.JLabel();
+        lblPorcentaje = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabla);
+
+        combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cantidad de producciones por cada responsable", "Cantidad total producida por cada componente", "Listar producciones de mas de 100 unidades" }));
+        combo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboActionPerformed(evt);
+            }
+        });
+
+        lblPromedio.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lblPromedio.setText("jLabel1");
+
+        lblPorcentaje.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        lblPorcentaje.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPorcentaje)
+                    .addComponent(lblPromedio)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addComponent(combo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblPromedio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPorcentaje)
+                .addGap(31, 31, 31))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
+        cargarConsultas(combo.getSelectedIndex());
+    }//GEN-LAST:event_comboActionPerformed
 
     /**
      * @param args the command line arguments
@@ -81,5 +210,10 @@ public class Reportes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> combo;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblPorcentaje;
+    private javax.swing.JLabel lblPromedio;
+    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

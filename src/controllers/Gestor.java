@@ -279,7 +279,7 @@ public class Gestor {
     
     public ArrayList<ProduccionOperario> totalComponente() {
         ArrayList<ProduccionOperario> lista = new ArrayList<>();
-        String sql = "SELECT c.descripcion as Componente, SUM(p.cantidadProduccion) AS ProduccionTotal FROM Componentes c, Produccion p WHERE p.codigoComponente = c.codigo GROUP BY r.descripcion ORDER BY 2 DESC";
+        String sql = "SELECT c.descripcion as Componente, SUM(p.cantidadProduccion) AS ProduccionTotal FROM Componentes c, Produccion p WHERE p.codigoComponente = c.codigo GROUP BY c.descripcion ORDER BY 2 DESC";
         
         try {
             Conectar();
@@ -339,21 +339,21 @@ public class Gestor {
     
     public float obtenerPromedio() {
         float promedio = 0.0f;
-        String sql = "SELECT AVG(cantidadProduccion) FROM Produccion";
+        String sql = "SELECT AVG(cantidadProduccion) AS Promedio FROM Produccion";
         
         try {
             Conectar();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            promedio = rs.getFloat(1);
             
+            if (rs.next()) {
+                promedio = rs.getFloat("Promedio");
+            }
         } catch (SQLException e) {
             System.out.print("Error:" + e.getMessage());
         } finally {
             Desconectar();
         }
-        
-        
         return promedio;
     }
     
@@ -365,7 +365,9 @@ public class Gestor {
             Conectar();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            porcentaje = rs.getFloat(1);
+            if (rs.next()) {
+                porcentaje = rs.getFloat("Porcentaje");
+            }
         } catch (SQLException e) {
             System.out.print("Error:" + e.getMessage());
         } finally {
