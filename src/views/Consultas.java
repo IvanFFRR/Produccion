@@ -7,24 +7,36 @@ package views;
 
 import controllers.Gestor;
 import dto.ProduccionOperario;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.TimerTask;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import java.util.Timer;
 import javax.swing.table.DefaultTableModel;
 import models.Responsable;
+
 
 /**
  *
  * @author IVAN
  */
-public class Consultas extends javax.swing.JFrame {
+public final class Consultas extends javax.swing.JFrame {
 
     /**
      * Creates new form Consultas
      */
+    
+    
+    ArrayList<ProduccionOperario> lista;
+    Timer count, timer;
+    int i = 10;
+    
     public Consultas() {
         initComponents();
         cargarCombo();
         llenarTabla();
+        autoRefrescar();
     }
     
     public void cargarCombo() {
@@ -40,7 +52,7 @@ public class Consultas extends javax.swing.JFrame {
     public void llenarTabla() {
         Gestor gestor = new Gestor();
         Responsable r = (Responsable)this.cmbResponsables.getSelectedItem();
-        ArrayList<ProduccionOperario> lista = gestor.obtenerProduccionOperario(r.getId());
+        lista = gestor.obtenerProduccionOperario(r.getId());
         
         String titulos[] = {"Fecha", "Componentes", "Cantidad"};
         
@@ -53,7 +65,31 @@ public class Consultas extends javax.swing.JFrame {
         
         tabla.setModel(model);
     }
-            
+    
+    public void autoRefrescar() {
+             
+        count = new Timer();
+        count.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                btnRefrescar.setText(Integer.toString(i));
+                if(i > 0) {
+                i = i - 1;
+                           }
+                else {
+                    btnRefrescar.setText("Refrescando");
+                    i = 10;
+                }
+          }
+        }, 0, 1000);
+        
+       timer = new Timer(); 
+       timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                llenarTabla();
+            }
+        }, 10000, 10000);
+      
+    }
         
     
 
@@ -69,6 +105,10 @@ public class Consultas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         cmbResponsables = new javax.swing.JComboBox<>();
+        btnMenu = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnRefrescar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,26 +132,71 @@ public class Consultas extends javax.swing.JFrame {
             }
         });
 
+        btnMenu.setText("< Menu");
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
+
+        btnReport.setText("Reporte");
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnRefrescar.setText("Refrescar");
+        btnRefrescar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRefrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefrescarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
-                    .addComponent(cmbResponsables, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbResponsables, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnMenu)
+                        .addGap(11, 11, 11)
+                        .addComponent(btnRefrescar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnReport)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(11, 11, 11)
                 .addComponent(cmbResponsables, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnMenu)
+                    .addComponent(btnRefrescar)
+                    .addComponent(btnEditar)
+                    .addComponent(btnReport))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
+
+        btnRefrescar.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -119,6 +204,44 @@ public class Consultas extends javax.swing.JFrame {
     private void cmbResponsablesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbResponsablesItemStateChanged
         llenarTabla();
     }//GEN-LAST:event_cmbResponsablesItemStateChanged
+
+    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+        this.setEnabled(false);
+        this.setVisible(false);
+        Menu menu = new Menu();
+        menu.setEnabled(true);
+        menu.setVisible(true);
+    }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        this.setEnabled(false);
+        this.setVisible(false);
+        Reportes reporte = new Reportes();
+        reporte.setEnabled(true);
+        reporte.setVisible(true);
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int fila = tabla.getSelectedRow();
+        ProduccionOperario po = (ProduccionOperario)lista.get(fila);
+        
+        if(po != null) {
+            Alta alta = new Alta(po);
+            alta.setEnabled(true);
+            alta.setVisible(true);
+        }
+        else 
+            JOptionPane.showMessageDialog(this, "No seleccionaste ningún elemento");
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRefrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrescarActionPerformed
+        i = 10;
+        llenarTabla();
+        count.cancel();
+        timer.cancel();
+        autoRefrescar();
+      
+    }//GEN-LAST:event_btnRefrescarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,6 +279,10 @@ public class Consultas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnMenu;
+    private javax.swing.JButton btnRefrescar;
+    private javax.swing.JButton btnReport;
     private javax.swing.JComboBox<String> cmbResponsables;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabla;

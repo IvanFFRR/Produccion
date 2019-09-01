@@ -6,6 +6,7 @@
 package views;
 
 import controllers.Gestor;
+import dto.ProduccionOperario;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -28,9 +29,9 @@ public final class Alta extends javax.swing.JFrame {
         
     }
     
-    private Produccion editar;
+    private ProduccionOperario editar;
     
-    public Alta(Produccion p) {
+    public Alta(ProduccionOperario p) {
         initComponents();
         cargarCombos();
         if(p != null) {
@@ -39,7 +40,6 @@ public final class Alta extends javax.swing.JFrame {
         }
     }
     
-        
     
     
     public void cargarCombos() {
@@ -61,9 +61,27 @@ public final class Alta extends javax.swing.JFrame {
     }
     
     public void cargarControles() {
-        cmbComponentes.setSelectedItem(editar.getComponente());
-        cmbResponsables.setSelectedItem(editar.getResponsable());
-        spnCantidad.setValue(editar.getCantidad());
+        DefaultComboBoxModel model = (DefaultComboBoxModel)cmbComponentes.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            Componente componente = (Componente)model.getElementAt(i);
+            if(componente.getId()== editar.getCodigoComponente())
+            {
+                cmbComponentes.setSelectedItem(componente);
+                break;
+            }
+        }
+        
+        model = (DefaultComboBoxModel)cmbResponsables.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            Responsable responsable = (Responsable)model.getElementAt(i);
+            if(responsable.getId()== editar.getCodigoResponsable())
+            {
+                cmbComponentes.setSelectedItem(responsable);
+                break;
+            }
+        }
+        
+        spnCantidad.setValue(editar.getCantidadProduccion());
         txtFecha.setText(editar.getFecha());
     }
     
@@ -137,24 +155,25 @@ public final class Alta extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnMenu)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnCargar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLimpiar))
                     .addComponent(cmbResponsables, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbComponentes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(spnCantidad)
-                    .addComponent(txtFecha)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(spnCantidad, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnMenu)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnCargar)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnLimpiar))))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,7 +194,7 @@ public final class Alta extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCargar)
                     .addComponent(btnLimpiar)
@@ -204,10 +223,12 @@ public final class Alta extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Hubo un problema al registrar la venta");
         }
         else {
-            produccion.setId(editar.getId());
+            produccion.setId(editar.getCodigoProduccion());
             boolean actualizado = gestor.actualizarProduccion(produccion);
-            if(actualizado) 
+            if(actualizado) {
                 JOptionPane.showMessageDialog(this, "La producción se actualizó exitosamente");
+                editar = null;
+            }
             else
                 JOptionPane.showMessageDialog(this, "Hubo un error al actualizar la venta");
         }
@@ -215,12 +236,15 @@ public final class Alta extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnCargarActionPerformed
 
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+    public void Limpiar() {
         cmbComponentes.setSelectedIndex(-1);
         cmbResponsables.setSelectedIndex(-1);
         spnCantidad.setValue(0);
         txtFecha.setText(null);
-        
+    }
+    
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        Limpiar();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void spnCantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnCantidadStateChanged

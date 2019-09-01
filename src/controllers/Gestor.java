@@ -22,7 +22,7 @@ public class Gestor {
     private void Conectar() {
        
         try {
-            url = "jdbc:sqlserver://localhost:1433";
+            url = "jdbc:sqlserver://localhost:1433;databaseName=Produccion";
             user = "sa";
             pass = "maximo";
             
@@ -164,7 +164,7 @@ public class Gestor {
         
         try {
             Conectar();
-            PreparedStatement ps = con.prepareStatement("UPDATE Produccion SET fecha = ?, cantidad = ?, codigoResponsable = ?, codigoComponente = ? WHERE codigo = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Produccion SET fecha = ?, cantidadProduccion = ?, codigoResponsable = ?, codigoComponente = ? WHERE codigoProduccion = ?");
             ps.setString(1, p.getFecha());
             ps.setInt(2, p.getCantidad());
             ps.setInt(3, p.getResponsable().getId());
