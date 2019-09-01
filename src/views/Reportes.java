@@ -17,6 +17,8 @@ public class Reportes extends javax.swing.JFrame {
     public Reportes() {
         initComponents();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
